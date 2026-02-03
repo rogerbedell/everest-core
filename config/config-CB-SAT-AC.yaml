@@ -1,6 +1,15 @@
 settings:
   telemetry_enabled: false
 active_modules:
+  packet_sniffer:
+    module: PacketSniffer
+    config_module:
+      device: cb_plc
+      session_logging_path: ""
+    connections:
+      evse_manager:
+        - implementation_id: evse
+          module_id: connector_1
   auth:
     config_module:
       connection_timeout: 60
@@ -128,3 +137,18 @@ active_modules:
   cb_bsp:
     connections: {}
     module: evse_board_support_API
+  evse_manager_consumer_api:
+    module: evse_manager_consumer_API
+    connections:
+      evse_manager:
+        - implementation_id: evse
+          module_id: connector_1
+      evse_bsp:
+        - implementation_id: main
+          module_id: cb_bsp
+  external_energy_limits_consumer_api:
+    module: external_energy_limits_consumer_API
+    connections:
+      energy_node:
+        - implementation_id: external_limits
+          module_id: grid_connection_point

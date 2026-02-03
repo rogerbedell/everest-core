@@ -1,6 +1,15 @@
 settings:
   telemetry_enabled: false
 active_modules:
+  packet_sniffer:
+    module: PacketSniffer
+    config_module:
+      device: cb_plc
+      session_logging_path: ""
+    connections:
+      evse_manager:
+        - implementation_id: evse
+          module_id: connector_1
   auth:
     config_module:
       connection_timeout: 60
@@ -161,7 +170,7 @@ active_modules:
     config_module:
       cfg_heartbeat_interval_ms: 500
     module: over_voltage_monitor_API
-  external_limits:
+  external_energy_limits_consumer_api:
     connections:
       energy_node:
         - implementation_id: external_limits
@@ -170,3 +179,12 @@ active_modules:
       cfg_heartbeat_interval_ms: 1000
       cfg_communication_check_to_s: 0
     module: external_energy_limits_consumer_API
+  evse_manager_consumer_api:
+    module: evse_manager_consumer_API
+    connections:
+      evse_manager:
+        - implementation_id: evse
+          module_id: connector_1
+      evse_bsp:
+        - implementation_id: main
+          module_id: cb_bsp

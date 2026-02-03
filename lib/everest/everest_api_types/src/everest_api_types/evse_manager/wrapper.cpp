@@ -209,10 +209,6 @@ SessionEventEnum_Internal to_internal_api(SessionEventEnum_External const& val) 
         return TarT::ChargingPausedEV;
     case SrcT::ChargingPausedEVSE:
         return TarT::ChargingPausedEVSE;
-    case SrcT::WaitingForEnergy:
-        return TarT::WaitingForEnergy;
-    case SrcT::ChargingResumed:
-        return TarT::ChargingResumed;
     case SrcT::StoppingCharging:
         return TarT::StoppingCharging;
     case SrcT::ChargingFinished:
@@ -225,10 +221,6 @@ SessionEventEnum_Internal to_internal_api(SessionEventEnum_External const& val) 
         return TarT::ReservationStart;
     case SrcT::ReservationEnd:
         return TarT::ReservationEnd;
-    case SrcT::ReplugStarted:
-        return TarT::ReplugStarted;
-    case SrcT::ReplugFinished:
-        return TarT::ReplugFinished;
     case SrcT::PluginTimeout:
         return TarT::PluginTimeout;
     case SrcT::SwitchingPhases:
@@ -267,10 +259,6 @@ SessionEventEnum_External to_external_api(SessionEventEnum_Internal const& val) 
         return TarT::ChargingPausedEV;
     case SrcT::ChargingPausedEVSE:
         return TarT::ChargingPausedEVSE;
-    case SrcT::WaitingForEnergy:
-        return TarT::WaitingForEnergy;
-    case SrcT::ChargingResumed:
-        return TarT::ChargingResumed;
     case SrcT::StoppingCharging:
         return TarT::StoppingCharging;
     case SrcT::ChargingFinished:
@@ -283,10 +271,6 @@ SessionEventEnum_External to_external_api(SessionEventEnum_Internal const& val) 
         return TarT::ReservationStart;
     case SrcT::ReservationEnd:
         return TarT::ReservationEnd;
-    case SrcT::ReplugStarted:
-        return TarT::ReplugStarted;
-    case SrcT::ReplugFinished:
-        return TarT::ReplugFinished;
     case SrcT::PluginTimeout:
         return TarT::PluginTimeout;
     case SrcT::SwitchingPhases:
@@ -296,6 +280,38 @@ SessionEventEnum_External to_external_api(SessionEventEnum_Internal const& val) 
     }
 
     throw std::out_of_range("Unexpected value for SessionEventEnum_Internal");
+}
+
+PauseChargingEVSEReasonEnum_Internal to_internal_api(PauseChargingEVSEReasonEnum_External const& val) {
+    using SrcT = PauseChargingEVSEReasonEnum_External;
+    using TarT = PauseChargingEVSEReasonEnum_Internal;
+
+    switch (val) {
+    case SrcT::UserPause:
+        return TarT::UserPause;
+    case SrcT::NoEnergy:
+        return TarT::NoEnergy;
+    case SrcT::Error:
+        return TarT::Error;
+    }
+
+    throw std::out_of_range("Unexpected value for PauseChargingEVSEReasonEnum_External");
+}
+
+PauseChargingEVSEReasonEnum_External to_external_api(PauseChargingEVSEReasonEnum_Internal const& val) {
+    using SrcT = PauseChargingEVSEReasonEnum_Internal;
+    using TarT = PauseChargingEVSEReasonEnum_External;
+
+    switch (val) {
+    case SrcT::UserPause:
+        return TarT::UserPause;
+    case SrcT::NoEnergy:
+        return TarT::NoEnergy;
+    case SrcT::Error:
+        return TarT::Error;
+    }
+
+    throw std::out_of_range("Unexpected value for PauseChargingEVSEReasonEnum_Internal");
 }
 
 SessionEvent_Internal to_internal_api(SessionEvent_External const& val) {
@@ -308,6 +324,7 @@ SessionEvent_Internal to_internal_api(SessionEvent_External const& val) {
     result.session_finished = optToInternal(val.session_finished);
     result.transaction_started = optToInternal(val.transaction_started);
     result.transaction_finished = optToInternal(val.transaction_finished);
+    result.charging_paused_evse = optToInternal(val.charging_paused_evse);
     result.charging_state_changed_event = optToInternal(val.charging_state_changed_event);
     result.authorization_event = optToInternal(val.authorization_event);
     result.source = optToInternal(val.source);
@@ -324,6 +341,7 @@ SessionEvent_External to_external_api(SessionEvent_Internal const& val) {
     result.session_finished = optToExternal(val.session_finished);
     result.transaction_started = optToExternal(val.transaction_started);
     result.transaction_finished = optToExternal(val.transaction_finished);
+    result.charging_paused_evse = optToExternal(val.charging_paused_evse);
     result.charging_state_changed_event = optToExternal(val.charging_state_changed_event);
     result.source = optToExternal(val.source);
     return result;
@@ -504,6 +522,22 @@ ChargingStateChangedEvent_Internal to_internal_api(ChargingStateChangedEvent_Ext
 ChargingStateChangedEvent_External to_external_api(ChargingStateChangedEvent_Internal const& val) {
     ChargingStateChangedEvent_External result;
     result.meter_value = powermeter::to_external_api(val.meter_value);
+    return result;
+}
+
+ChargingPausedEVSEReasons_Internal to_internal_api(ChargingPausedEVSEReasons_External const& val) {
+    ChargingPausedEVSEReasons_Internal result;
+    for (auto const& reason : val.reasons) {
+        result.reasons.push_back(to_internal_api(reason));
+    }
+    return result;
+}
+
+ChargingPausedEVSEReasons_External to_external_api(ChargingPausedEVSEReasons_Internal const& val) {
+    ChargingPausedEVSEReasons_External result;
+    for (auto const& reason : val.reasons) {
+        result.reasons.push_back(to_external_api(reason));
+    }
     return result;
 }
 
