@@ -259,10 +259,10 @@ ChargePointConfigurationBase::csvToMeasurandWithPhaseVector(const std::string& c
 }
 
 std::optional<std::uint32_t> ChargePointConfigurationBase::extractConnectorId(const std::string& str) {
-    // example string "MeterPublicKey[1]"
+    // example string "MeterPublicKey1"
 
     std::optional<std::uint32_t> result;
-    const std::regex id_regex(R"(^.+\[(\d+)\]$)");
+    const std::regex id_regex(R"(^.*[^\d](\d+)$)");;
     std::smatch id_match;
 
     if (std::regex_match(str, id_match, id_regex)) {
@@ -281,7 +281,7 @@ std::optional<std::uint32_t> ChargePointConfigurationBase::extractConnectorId(co
 }
 
 std::string ChargePointConfigurationBase::meterPublicKeyString(std::uint32_t connector_id) {
-    return std::string{"MeterPublicKey["} + std::to_string(connector_id) + ']';
+    return std::string{"MeterPublicKey"} + std::to_string(connector_id);
 }
 
 bool ChargePointConfigurationBase::toBool(const std::string& value) {

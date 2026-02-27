@@ -2613,8 +2613,8 @@ std::optional<KeyValue> ChargePointConfigurationDeviceModel::get(const CiString<
                 get_value = false;
             }
         }
-        // check keys starting MeterPublicKey[
-        if (key_str.find("MeterPublicKey[") == 0) {
+        // check keys starting MeterPublicKey
+        if (key_str.find("MeterPublicKey") == 0) {
             auto id = extractConnectorId(key_str);
             if (id) {
                 result = getPublicKeyKeyValue(id.value());
@@ -2839,7 +2839,7 @@ std::optional<ConfigurationStatus> ChargePointConfigurationDeviceModel::set(cons
             result = ConfigurationStatus::NotSupported;
             break;
         case keys::valid_keys::MeterPublicKeys:
-            // should never match - connector ID expected: MeterPublicKey[1]
+            // should never match - connector ID expected: MeterPublicKey1
             EVLOG_error << R"(ChargePointConfiguration::set("MeterPublicKey", )" << value << R"(") not supported)";
             result = ConfigurationStatus::NotSupported;
             break;
@@ -2941,7 +2941,7 @@ std::optional<ConfigurationStatus> ChargePointConfigurationDeviceModel::set(cons
             } else {
                 result = ConfigurationStatus::NotSupported;
             }
-        } else if (key_str.find("MeterPublicKey[") == 0) {
+        } else if (key_str.find("MeterPublicKey") == 0) {
             // not setable
         } else {
             // custom key

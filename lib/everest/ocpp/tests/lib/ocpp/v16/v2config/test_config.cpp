@@ -20,23 +20,20 @@ TEST(ConnectorID, Extract) {
 
     EXPECT_EQ(CPCB::extractConnectorId(""), std::nullopt);
     EXPECT_EQ(CPCB::extractConnectorId("1234"), std::nullopt);
-    EXPECT_EQ(CPCB::extractConnectorId("[1234"), std::nullopt);
-    EXPECT_EQ(CPCB::extractConnectorId("1234]"), std::nullopt);
-    EXPECT_EQ(CPCB::extractConnectorId("[1]"), std::nullopt);
-    EXPECT_EQ(CPCB::extractConnectorId("A[]"), std::nullopt);
-    EXPECT_EQ(CPCB::extractConnectorId("A[1.3]"), std::nullopt);
-    EXPECT_EQ(CPCB::extractConnectorId("A[1]"), 1);
-    EXPECT_EQ(CPCB::extractConnectorId("A[12]"), 12);
-    EXPECT_EQ(CPCB::extractConnectorId("A[123]"), 123);
+    EXPECT_EQ(CPCB::extractConnectorId("A"), std::nullopt);
+    EXPECT_EQ(CPCB::extractConnectorId("ABC"), std::nullopt);
+    EXPECT_EQ(CPCB::extractConnectorId("A1"), 1);
+    EXPECT_EQ(CPCB::extractConnectorId("A12"), 12);
+    EXPECT_EQ(CPCB::extractConnectorId("A123"), 123);
 }
 
 TEST(ConnectorID, Build) {
     using CPCB = ocpp::v16::ChargePointConfigurationBase;
 
-    EXPECT_EQ(CPCB::meterPublicKeyString(0), "MeterPublicKey[0]");
-    EXPECT_EQ(CPCB::meterPublicKeyString(1), "MeterPublicKey[1]");
-    EXPECT_EQ(CPCB::meterPublicKeyString(12), "MeterPublicKey[12]");
-    EXPECT_EQ(CPCB::meterPublicKeyString(123), "MeterPublicKey[123]");
+    EXPECT_EQ(CPCB::meterPublicKeyString(0), "MeterPublicKey0");
+    EXPECT_EQ(CPCB::meterPublicKeyString(1), "MeterPublicKey1");
+    EXPECT_EQ(CPCB::meterPublicKeyString(12), "MeterPublicKey12");
+    EXPECT_EQ(CPCB::meterPublicKeyString(123), "MeterPublicKey123");
 }
 
 TEST(ConnectorID, PhaseRotation) {
